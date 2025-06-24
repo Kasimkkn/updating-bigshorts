@@ -56,10 +56,10 @@ const StoryQueue = ({ coverFile, profileImage, userName, userFullName, uploadTim
                        bg-bg-color rounded-lg transition-all mx-1 sm:mx-2 z-10"
         >
             <SafeImage
-            onContextMenu={(e) => e.preventDefault()}
-            src={coverFile}
-            alt="Story of non center user"
-            className="w-full h-full object-cover rounded-lg blur-md"
+                onContextMenu={(e) => e.preventDefault()}
+                src={coverFile}
+                alt="Story of non center user"
+                className="w-full h-full object-cover rounded-lg blur-md"
             />
 
             <div className="absolute inset-0 w-full h-full flex items-center justify-center flex-col px-3">

@@ -16,7 +16,6 @@ interface SnippageSnupProps {
 }
 
 const SnippageSnup: React.FC<SnippageSnupProps> = ({ postShare, isTimerPaused, isMuted, toggleMute }) => {
-  //const [isMuted, setIsMuted] = useState(true);
   const [videoUrl, setVideoUrl] = useState("");
   const [videoReady, setVideoReady] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -33,14 +32,12 @@ const SnippageSnup: React.FC<SnippageSnupProps> = ({ postShare, isTimerPaused, i
   const currentVideoData = allInteractiveVideos[currentVideoIndex] || {};
 
   useEffect(() => {
-    // Extract video URL from the shared post data
     if (postShare && postShare.interactiveVideo) {
       try {
         const interactiveVideos = JSON.parse(postShare.interactiveVideo.toString());
         setAllInteractiveVideos(interactiveVideos);
         if (interactiveVideos && interactiveVideos[0]?.path) {
           const rawVideoPath = interactiveVideos[0]?.path || "";
-          // Extract just the MP4 file path by replacing the domain and keeping only up to .mp4
           let newVideoUrl = rawVideoPath.replace(
             "https://d1332u4stxguh3.cloudfront.net/",
             "/video/"
@@ -108,7 +105,7 @@ const SnippageSnup: React.FC<SnippageSnupProps> = ({ postShare, isTimerPaused, i
       if (isTimerPaused) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => { });
       }
     }
   }, [isTimerPaused]);

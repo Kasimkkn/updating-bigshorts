@@ -140,29 +140,27 @@ const PostInStory = ({ postShare, isTimerPaused, isMuted, toggleMute }: SnipInSt
 						width: `${postWidth}px`,
 						height: `${postHeight}px`
 					}}
-				>	
-				{postItem.stories[0].isForInteractiveVideo && (
-					<>
+				>
+					{postItem.stories[0].isForInteractiveVideo && (
 						<div className="absolute top-[24px] -right-7 z-40">
 							<button
 								onClick={toggleMute}
 								className="text-text-color bg-secondary-bg-color opacity-70 rounded-full h-max w-max p-2"
 							>
-							{isMuted ? (
-								<HiMiniSpeakerWave className="text-red-600" />
-							) : (
-								<HiMiniSpeakerWave />
-							)}
+								{isMuted ? (
+									<HiMiniSpeakerWave className="text-red-600" />
+								) : (
+									<HiMiniSpeakerWave />
+								)}
 							</button>
 						</div>
-					</>
-				)}
+					)}
 					<div className="relative w-full h-full flex items-center justify-center">
-						
+
 						<SharedSsupViewer
 							sharedSsupData={postItem}
 							onClose={() => {
-}}
+							}}
 							scale={0.6} // Adjusted to maintain aspect ratio
 						/>
 					</div>
@@ -198,28 +196,28 @@ const PostInStory = ({ postShare, isTimerPaused, isMuted, toggleMute }: SnipInSt
 		<div
 			ref={parentRef}
 			className="w-full h-full flex items-center justify-center"
-		>	
+		>
 			{(postItem.isForInteractiveVideo || postItem.audioFile) && (
-					<div className="absolute top-24 right-2 z-50">
-						<button
-							onClick={toggleMute}
-							className="text-text-color bg-secondary-bg-color opacity-70 rounded-full h-max w-max p-2"
-						>
-							{isMuted ? (
-								<HiMiniSpeakerWave className="text-red-600" />
-							) : (
-								<HiMiniSpeakerWave />
-							)}
-						</button>
-					</div>
-				)}
+				<div className="absolute top-24 right-2 z-50">
+					<button
+						onClick={toggleMute}
+						className="text-text-color bg-secondary-bg-color opacity-70 rounded-full h-max w-max p-2"
+					>
+						{isMuted ? (
+							<HiMiniSpeakerWave className="text-red-600" />
+						) : (
+							<HiMiniSpeakerWave />
+						)}
+					</button>
+				</div>
+			)}
 			<div
 				className="relative overflow-hidden w-full"
 				style={{
 					height: `${postContainerHeight}px`,
 				}}
 			>
-				
+
 				{postShare.ssupItem ? renderSsupItem() : renderSnipItem()}
 				{/* <Image
 					onContextMenu={(e) => e.preventDefault()}

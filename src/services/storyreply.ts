@@ -10,9 +10,8 @@ interface StoryReplyRequest {
     storyDetails: string
 }
 
-async function storyReply(userData: StoryReplyRequest): Promise<StoryReplyResponse> {
+async function sendStoryReply(userData: StoryReplyRequest): Promise<StoryReplyResponse> {
     try {
-        // const encryptedData = await EncryptionService.encryptRequest({userData});
         let token = await getAuthToken()
         const response = await fetchWithDecryption('/api/storyreply', {
             method: 'POST',
@@ -35,5 +34,5 @@ async function storyReply(userData: StoryReplyRequest): Promise<StoryReplyRespon
     }
 }
 
-export { storyReply }
+export { sendStoryReply }
 export type { StoryReplyRequest, StoryReplyResponse }

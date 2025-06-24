@@ -82,7 +82,7 @@ const InsightsModal: React.FC<InsightsModalProps> = ({ isOpen, onClose, data, fe
     return platforms.map(platform => {
       const followerShare = followerShares[platform] || 0;
       const nonFollowerShare = nonFollowerShares[platform] || 0;
-const totalShares = followerShare + nonFollowerShare;
+      const totalShares = followerShare + nonFollowerShare;
       if (totalShares > 0) {
         return {
           name: platform.charAt(0).toUpperCase() + platform.slice(1),
