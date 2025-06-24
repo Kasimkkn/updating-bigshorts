@@ -3,7 +3,7 @@ import CommentsSection from "@/components/CommentUi/CommentUi";
 import ReportModal from "@/components/modal/ReportModal";
 import SharePostModal from "@/components/modal/SharePostModal";
 import MoreOptions from "@/components/MoreOptions";
-import PostActivity from "@/components/PostActivity/PostActivity";
+import PostActivity from "@/components/posts/shared/PostActivity";
 import LikeButton from "@/components/shared/LikeButton";
 import { SnipsPageSkeleton } from "@/components/Skeletons/Skeletons";
 import VideoPlayerWidget from "@/components/VideoAndImagesComp/VideoPlayerWidget";
@@ -55,7 +55,7 @@ const SnipsPage = () => {
   const { setInAppFlixData, clearFlixData } = useInAppRedirection();
   const [showPlayPauseOverlay, setShowPlayPauseOverlay] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [userId, ,isHydrated] = useLocalStorage<string>("userId", "");
+  const [userId, , isHydrated] = useLocalStorage<string>("userId", "");
 
   // Play/Pause overlay logic
   const showPlayPause = useRef<NodeJS.Timeout | null>(null);
@@ -366,7 +366,7 @@ const SnipsPage = () => {
     if (currentIndex >= posts.length - 1 && !inAppSnipsData) {
       fetchPosts(userId);
     }
-  }, [currentIndex,fetchPosts, isHydrated]);
+  }, [currentIndex, fetchPosts, isHydrated]);
 
   useEffect(() => {
     if (currentPost?.interactiveVideo && currentVideoIndex >= 0) {
@@ -636,7 +636,7 @@ const SnipsPage = () => {
               </button>
               {/* Like button group */}
               <div className="flex flex-col items-center mb-6">
-                <LikeButton className={buttonClasses} size="text-3xl md:text-4xl" isLiked={currentVideoLikeDetails?.isLiked || currentPost.isLiked} onClick={()=>handleLikeToVideo(currentPost.postId, allCurrentVideos[currentVideoIndex].video_id!)}/>
+                <LikeButton className={buttonClasses} size="text-3xl md:text-4xl" isLiked={currentVideoLikeDetails?.isLiked || currentPost.isLiked} onClick={() => handleLikeToVideo(currentPost.postId, allCurrentVideos[currentVideoIndex].video_id!)} />
                 <button onClick={toggleLike}>
                   {currentVideoLikeDetails &&
                     <span className="ml-1 text-sm">

@@ -3,7 +3,6 @@ import { SearchSnipsSkeleton } from '@/components/Skeletons/Skeletons';
 import SnipsModal from "@/components/modal/SnipsModal";
 import { useInAppRedirection } from "@/context/InAppRedirectionContext";
 import { PostlistItem } from "@/models/postlistResponse";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import SafeImage from '../shared/SafeImage';
@@ -12,7 +11,7 @@ interface SearchSnipsProps {
   searchResultsSnips: PostlistItem[];
   isSearching: boolean;
   loadMoreResultsForSnips: () => void;
-  selectedSnip: PostlistItem | null;
+  selectedSnip?: PostlistItem | null;
   setSelectedSnip: React.Dispatch<React.SetStateAction<PostlistItem | null>>;
   isSnipsModalOpen: boolean;
   setIsSnipsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -62,10 +61,10 @@ const SearchSnips: React.FC<SearchSnipsProps> = ({
               <div className="relative w-full h-60 bg-secondary-bg-color rounded overflow-hidden">
                 {result.coverFile ? (
                   <SafeImage
-                  src={result.coverFile}
-                  alt={result.postTitle}
-                  className="w-full h-full object-cover"
-                 />
+                    src={result.coverFile}
+                    alt={result.postTitle}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="text-xs text-text-light">No Image</span>

@@ -23,7 +23,7 @@ import { GoComment } from "react-icons/go";
 import { HiOutlineSpeakerWave, HiOutlineSpeakerXMark } from "react-icons/hi2";
 import { IoChevronBackSharp, IoChevronDownSharp, IoChevronUpSharp, IoClose, IoStarOutline, IoStarSharp } from "react-icons/io5";
 import ReactPlayer from "react-player";
-import PostActivity from "../PostActivity/PostActivity";
+import PostActivity from "../posts/shared/PostActivity";
 import { SnipsPageSkeleton } from "../Skeletons/Skeletons";
 
 

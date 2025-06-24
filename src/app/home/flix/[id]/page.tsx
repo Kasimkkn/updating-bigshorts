@@ -262,8 +262,8 @@ const FlixPage = () => {
 
                 <div
                     ref={videoListRef}
-                    className='w-full md:w-[27vw] block px-4 md:p-4 md:max-h-[95vh] h-full md:overflow-y-auto max-md:pb-20'
-                > 
+                    className='w-full md:w-[27vw] block px-4 md:p-4 md:max-h-[95vh] h-full md:overflow-y-auto max-md:pb-20 md:fixed right-0'
+                >
                     <div>
                         <h2 className='max-md:hidden text-lg md:text-2xl font-bold mb-4'>
                             {inAppFlixData?.isOriginal ? 'Episodes' : 'Recommended Minis'}

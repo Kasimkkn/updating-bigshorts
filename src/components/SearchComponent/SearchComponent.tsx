@@ -28,9 +28,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
   const [showDropdown, setShowDropdown] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [activeTab, setActiveTab] = useState<"users" | "videos" | "snips">("videos");
-  const [searchPage, setSearchPage] = useState(1);
-  const { setInAppSnipsData, setSnipId, setSnipIndex, } = useInAppRedirection()
-  const [selectedSnip, setSelectedSnip] = useState<PostlistItem | null>(null);
+  const { setInAppSnipsData } = useInAppRedirection()
   const [isSnipsModalOpen, setIsSnipsModalOpen] = useState(false);
   const { setInAppFlixData, clearFlixData } = useInAppRedirection();
 
@@ -41,7 +39,6 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
 
   const setSearchPageAndRef = (page: number) => {
-    setSearchPage(page);
     searchPageRef.current = page;
   };
 
@@ -71,9 +68,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
   }
 
   const closeSnipsModal = () => {
-    setIsSnipsModalOpen(false); // Close the modal
-    //setSelectedSnip(null); // Reset the selected Snip
-    //setSearchResultsSnips([]); // Clear the Snips results
+    setIsSnipsModalOpen(false);
   };
 
   type RecentSearch =
@@ -137,9 +132,9 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
     }
   }, []);
 
-  const recentSearchUsers = recentSearches.filter(item => item.type === "user") as Extract<RecentSearch, { type: "user" }>[];
-  const recentSearchMinis = recentSearches.filter(item => item.type === "mini") as Extract<RecentSearch, { type: "mini" }>[];
-  const recentSearchSnips = recentSearches.filter(item => item.type === "snip") as Extract<RecentSearch, { type: "snip" }>[];
+  const recentSearchUsers = recentSearches.filter(item => item.type === "user");
+  const recentSearchMinis = recentSearches.filter(item => item.type === "mini");
+  const recentSearchSnips = recentSearches.filter(item => item.type === "snip");
 
 
   const removeSearch = (indexToRemove: number): void => {
@@ -321,7 +316,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
         }
         if (response?.isSuccess && response.data) {
           setSearchResults((prev) =>
-            currentPage === 1 ? response!.data : [...prev, ...response!.data]
+            currentPage === 1 ? response.data : [...prev, ...response.data]
           );
 
           if (response.data.length > 0) {
@@ -361,16 +356,16 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
         limit: limit,
         offset: offset,
       });
-if (responseSnips?.isSuccess && responseSnips.data) {
+      if (responseSnips?.isSuccess && responseSnips.data) {
         if (responseSnips.data.length > 0) {
           // Update results using a callback to ensure the latest state
           setSearchResultsSnips((prevResults) => {
-return [...prevResults, ...responseSnips.data];
+            return [...prevResults, ...responseSnips.data];
           });
 
           // Increment the page counter for the next request
           const nextPage = searchPageRef.current + 1;
-setSearchPageAndRef(nextPage);
+          setSearchPageAndRef(nextPage);
         }
       } else {
         console.error("API returned unsuccessful response for snips:", responseSnips);
@@ -481,7 +476,7 @@ setSearchPageAndRef(nextPage);
 
               {/* Recent Viewed Users */}
               {recentSearchUsers.length > 0 && (
-                <>
+                <div className="text-text-color">
                   <h3 className="text-lg font-semibold mb-2">Recent Viewed Users</h3>
                   <ul className="space-y-2 mb-4">
                     {recentSearchUsers.map((item, index) => (
@@ -505,7 +500,7 @@ setSearchPageAndRef(nextPage);
                       </li>
                     ))}
                   </ul>
-                </>
+                </div>
               )}
 
               {/* Recent Viewed Snips */}
@@ -628,7 +623,6 @@ setSearchPageAndRef(nextPage);
                     searchResultsSnips={searchResultsSnips}
                     isSearching={isSearching}
                     loadMoreResultsForSnips={loadMoreResultsForSnips}
-                    selectedSnip={selectedSnip}
                     setSelectedSnip={() => { }}
                     isSnipsModalOpen={isSnipsModalOpen}
                     setIsSnipsModalOpen={() => { }}

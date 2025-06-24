@@ -1,13 +1,11 @@
 import { StoryData, StoryInsightsData } from '@/types/storyTypes'
 import useUserRedirection from '@/utils/userRedirection'
 import React, { useEffect, useRef, useState } from 'react'
+import { FaPause, FaPlay } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
+import { MdErrorOutline } from 'react-icons/md'
 import ReactPlayer from 'react-player'
 import Avatar from '../Avatar/Avatar'
-import CommonModalLayer from '../modal/CommonModalLayer'
-import { FaPause, FaPlay } from 'react-icons/fa';
-import { MdErrorOutline } from 'react-icons/md';
-import useLocalStorage from '@/hooks/useLocalStorage'
 import SafeImage from '../shared/SafeImage'
 
 interface SingleStoryModalProps {
@@ -19,12 +17,9 @@ const SingleStoryModal: React.FC<SingleStoryModalProps> = ({ storyData, closeMod
     const [currentSubStoryIndex, setCurrentSubStoryIndex] = useState(0);
     const [isMuted, setisMuted] = useState(false);
     const redirectUser = useUserRedirection();
-    const [openStoryAnalytics, setOpenStoryAnalytics] = useState(false);
-    const [storyInsights, setStoryInsights] = useState<StoryInsightsData>({} as StoryInsightsData);
     const [videoLoading, setVideoLoading] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [elapsed, setElapsed] = useState(0); // ms elapsed for current story
-    const progressRef = useRef<number>(0);
     const videoRef = useRef<HTMLDivElement | null>(null);
     const currentStory = storyData[0].stories[currentSubStoryIndex];
     const isVideo = currentStory?.isForInteractiveVideo === 1;
@@ -102,9 +97,9 @@ const SingleStoryModal: React.FC<SingleStoryModalProps> = ({ storyData, closeMod
                                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.10)' }}
                             >
                                 {isPaused ? (
-                                    <FaPlay className="text-black text-lg" />
+                                    <FaPlay className="text-white text-lg" />
                                 ) : (
-                                    <FaPause className="text-black text-lg" />
+                                    <FaPause className="text-white text-lg" />
                                 )}
                             </button>
                         )}
@@ -202,8 +197,7 @@ const SingleStoryModal: React.FC<SingleStoryModalProps> = ({ storyData, closeMod
 
                         </>
                     )}
-                    {/* ...existing code for style jsx... */}
-                    <style jsx>{`
+                    <style>{`
                         .linearBackground {
                             background: linear-gradient(
                                 to right,

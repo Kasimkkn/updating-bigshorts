@@ -119,7 +119,7 @@ const SnipsPage = () => {
     try {
       const response: PostlistResponse = await getPostDetails(postId.toString());
 
-      if (response.isSuccess && response.data && response.data.length > 0) {
+      if (response.isSuccess && response.data?.length > 0) {
         // Replace the current posts array with the new post
         setPosts([response.data[0]]);
 
@@ -155,8 +155,6 @@ const SnipsPage = () => {
       }
     } catch (error) {
       console.error("Failed to fetch linked post details:", error);
-    } finally {
-
     }
   };
 
@@ -200,8 +198,6 @@ const SnipsPage = () => {
       }
     } catch (error) {
       console.error("Failed to fetch linked post details:", error);
-    } finally {
-
     }
   };
 
@@ -275,13 +271,12 @@ const SnipsPage = () => {
           }
         } catch (error) {
           console.error("Failed to fetch previous post:", error);
-        } finally {
         }
       }
     }
   };
 
-  const [id, ,isHydrated] = useLocalStorage<string>('userId', '');
+  const [id, , isHydrated] = useLocalStorage<string>('userId', '');
   const userId = id ? parseInt(id) : 0;
   const currentPost = useMemo(() => {
     return posts[currentIndex];
@@ -329,7 +324,6 @@ const SnipsPage = () => {
     }
 
     const videoId = allCurrentVideos[currentVideoIndex]?.video_id;
-    console
     if (videoId) {
       fetchLikeCounts(videoId);
     } else {
@@ -440,8 +434,8 @@ const SnipsPage = () => {
       try {
 
         const response = await saveVideoLike({ postId, videoId, isLike: updatedIsLiked });
-
         if (response.isSuccess) {
+
         } else {
           posts[currentIndex] = {
             ...currentPost,
@@ -482,25 +476,22 @@ const SnipsPage = () => {
         <div className="flex flex-col items-center justify-center relative rounded-lg">
 
           {currentPost.videoFile && currentPost.videoFile.length > 0 && (
-            <>
-
-              <VideoPlayerWidget
-                videoRef={videoRef}
-                videoUrl={videoUrl}
-                isMuted={isMuted}
-                handleNext={handleDownArrow}
-                handleMute={handleMute}
-                setCurrentTime={setCurrentTime}
-                jumpDuration={jumpDuration}
-                currentTime={currentTime}
-                allCurrentVideos={allCurrentVideos}
-                currentVideoIndex={currentVideoIndex}
-                currentPost={currentPost}
-                updateCurrentIndex={updateCurrentIndex}
-                currentIndex={currentIndex}
-                navigateToLinkedContent={handleLinkedContentNavigation}
-              />
-            </>
+            <VideoPlayerWidget
+              videoRef={videoRef}
+              videoUrl={videoUrl}
+              isMuted={isMuted}
+              handleNext={handleDownArrow}
+              handleMute={handleMute}
+              setCurrentTime={setCurrentTime}
+              jumpDuration={jumpDuration}
+              currentTime={currentTime}
+              allCurrentVideos={allCurrentVideos}
+              currentVideoIndex={currentVideoIndex}
+              currentPost={currentPost}
+              updateCurrentIndex={updateCurrentIndex}
+              currentIndex={currentIndex}
+              navigateToLinkedContent={handleLinkedContentNavigation}
+            />
           )}
           {currentVideoIndex > 0 && (
             <div className="absolute top-4 left-3 max-lg:left-40">
@@ -635,5 +626,4 @@ const SnipsPage = () => {
     </div>
   );
 };
-
 export default React.memo(SnipsPage);

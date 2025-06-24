@@ -1,22 +1,22 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
-import { InAppRedirectionProvider } from "@/context/InAppRedirectionContext";
-import { useCreationOption } from "@/context/useCreationOption";
+import logo from '@/assets/logo.svg';
 import CreationFlows from "@/components/LayoutComponent/CreationFlows";
 import MobileHeader from "@/components/LayoutComponent/MobileHeader";
 import NotificationPanel from "@/components/LayoutComponent/NotificationPanel";
 import SearchPanel from "@/components/LayoutComponent/SearchPanel";
 import SettingsPanel from "@/components/LayoutComponent/SettingsPanel";
-import SideBar from "@/components/shared/SideBar/SideBar";
-import logo from '@/assets/logo.svg';
+import SearchComponent from "@/components/SearchComponent/SearchComponent";
 import TopLoadingBar from "@/components/TopLoadingBar";
+import AccountOverviewModal from "@/components/modal/AccountOverviewModal";
+import SideBar from "@/components/shared/SideBar/SideBar";
+import { InAppRedirectionProvider } from "@/context/InAppRedirectionContext";
 import { useProgressBar } from "@/context/ProgressBarContext";
+import { useCreationOption } from "@/context/useCreationOption";
 import { useUserProfile } from "@/context/useUserProfile";
 import { useLayoutApi } from "@/hooks/LayoutHooks/useLayoutApi";
 import { useUIState } from "@/hooks/LayoutHooks/useUIState";
-import SearchComponent from "@/components/SearchComponent/SearchComponent";
-import AccountOverviewModal from "@/components/modal/AccountOverviewModal";
+import { usePathname } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
 
 type LayoutProps = {
   children: ReactNode;
@@ -164,7 +164,7 @@ const Layout = ({ children }: LayoutProps) => {
           )}
 
           <section className={`${isMobile && !shouldHideMobileHeader ? "pt-[4rem]" : ""} `}>
-            {showSearchBar && <SearchComponent dropdownStyle="style1"/>}
+            {showSearchBar && <SearchComponent dropdownStyle="style1" />}
             {children}
           </section>
 

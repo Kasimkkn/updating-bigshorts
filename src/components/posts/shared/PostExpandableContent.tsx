@@ -1,6 +1,6 @@
 import React from 'react';
 import CommentsSection from '../../CommentUi/CommentUi';
-import PostActivity from '../../PostActivity/PostActivity';
+import PostActivity from './PostActivity';
 import SharePostModal from '../../modal/SharePostModal';
 
 interface PostExpandableContentProps {
