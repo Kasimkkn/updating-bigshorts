@@ -23,7 +23,7 @@ const EditFLixModal = ({ flix, onClose }: EditFLixModalProps) => {
     });
 
     const [loading, setLoading] = React.useState(false);
-    const [coverFileImage, setCoverFileImage] = React.useState('');
+    const [coverFileImage, setCoverFileImage] = React.useState(flix.coverFile || '');
     const [videoUrl, setVideoUrl] = React.useState('');
 
     const onSubmit = async () => {

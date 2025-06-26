@@ -256,7 +256,7 @@ const FollowerModal = ({
                                                             }
                                                             className="px-2 py-1 border text-sm border-purple-600 linearText rounded-md"
                                                         >
-                                                            Follow
+                                                            Follow Back
                                                         </button>
                                                     ) : (
                                                         <button
@@ -270,7 +270,7 @@ const FollowerModal = ({
                                                             }
                                                             className="px-2 py-1 border text-sm border-purple-600 linearText rounded-md"
                                                         >
-                                                            Follow
+                                                            Follow Back
                                                         </button>
                                                     )}
                                                     <button

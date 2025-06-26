@@ -14,18 +14,23 @@ import { acceptcollaborationinvite } from '@/services/acceptcollaborationinvite'
 import toast from 'react-hot-toast';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import MobileAppModal from './modal/MobileAppModal';
+import ReportModal from './modal/ReportModal';
+import AboutAccountModal from './modal/AboutAccountModal';
+import { createPortal } from 'react-dom';
 
 interface MoreOptionsProps {
     post: PostlistItem;
     setIsOpen: Dispatch<SetStateAction<number | null>>;
     isSnipsPage?: boolean;
-    openReport?: (postId: number) => void
-    openAboutAccount?: (userId: number) => void
     updatePost: (postId: number, property: string, isBeforeUpdate: number) => void;
     page: 'flix' | 'followers' | 'snips';
 }
 
-const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccount, updatePost, page }: MoreOptionsProps) => {
+const isFlix = (post: PostlistItem)=>{
+    return 'genreId' in post;
+}
+
+const MoreOptions = ({ post, setIsOpen, isSnipsPage, updatePost, page }: MoreOptionsProps) => {
     const menuRef = useRef<HTMLDivElement>(null);
     const [id] = useLocalStorage<string>('userId', '');
     const userId = parseInt(id!);
@@ -35,6 +40,15 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
     const [showMobileModal, setShowMobileModal] = useState(false);
     const [selectedContentType, setSelectedContentType] = useState<string>('');
     const { isMobile, deviceType } = useMobileDetection();
+    const [openReportModal, setOpenReportModal] = useState(false);
+    const [openAboutAccountModal, setOpenAboutAccountModal] = useState(false);
+    // Track if we're mounted to safely render portals
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
     const optionsIfPostByUser = [
         { name: `Edit ${page === 'flix' ? 'Flix' : post.isForInteractiveVideo ? 'Snip' : 'Shot'}`, icon: <MdOutlineBorderColor className='text-lg'/> },
@@ -58,8 +72,9 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
 
     const optionsIfPostNotByUser = {
         flix: [
+            { name: 'About this Account', icon: <MdAccountCircle className='text-lg'/> },
             { name: 'Report', icon: <MdOutlineFlag className='text-lg'/>  },
-            { name: `${post.isSaved ? "Remove" : "Save to"} Bookmark`, icon: post.isSaved ? <MdBookmark className='text-lg'/> : <MdBookmarkBorder className='text-lg'/> },
+            { name: 'Hide Content', icon: <MdVisibility className='text-lg' /> },
             { name: 'Block User', icon: <MdBlockFlipped className='text-lg text-red-500'/> },
         ],
         followers: [
@@ -97,15 +112,14 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
                 handleDelete(post.postId, post.isPosted);
                 break;
             case 'About this Account':
-                openAboutAccount && openAboutAccount(post.userId)
+                setOpenAboutAccountModal(true);
                 break;
             case 'Hide Content':
                 setLoadingOption(optionName);
                 handleHide(post.userId);
                 break;
             case 'Report':
-                if (!openReport) return;
-                openReport(post.postId);
+                setOpenReportModal(true);
                 break;
             case 'Save to Bookmark':
             case 'Remove Bookmark':
@@ -124,7 +138,7 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
     }
 
     useEffect(() => {
-        if (openEditSnipModal || openEditFlixModal || showMobileModal) {
+        if (openEditSnipModal || openEditFlixModal || showMobileModal || openReportModal || openAboutAccountModal) {
             return;
         }
         const handleClickOutside = (e: MouseEvent) => {
@@ -135,7 +149,7 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [openEditSnipModal, openEditFlixModal, showMobileModal]);
+    }, [openEditSnipModal, openEditFlixModal, showMobileModal, openReportModal, openAboutAccountModal]);
 
     const handleSave = async (postId: number, isSave: number) => {
         try {
@@ -215,6 +229,16 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
             console.error("Error removing collaboration:", error);
         }
     }
+    
+    const handleReportModalClose = () => {
+        setOpenReportModal(false);
+        setIsOpen(null);
+    }
+    
+    const handleAboutAccountModalClose = () => {
+        setOpenAboutAccountModal(false);
+        setIsOpen(null);
+    }
 
     if (showMobileModal) {
         return (
@@ -255,11 +279,27 @@ const MoreOptions = ({ post, setIsOpen, isSnipsPage, openReport, openAboutAccoun
                     })}
                 </ul>
             </div>
+            
             {openEditSnipModal && !isMobile && (
                 <EditSnipModal onClose={toggleModalClose} post={post} isSnipsPage={isSnipsPage} />
             )}
+            
             {openEditFlixModal && !isMobile && (
                 <EditFLixModal onClose={toggleEditFlixModal} flix={post} />
+            )}
+            
+            {/* Render modals in portals to avoid parent positioning constraints */}
+            {mounted && openReportModal && createPortal(
+                <div className="fixed inset-0 z-[100]">
+                    <ReportModal postId={post.postId} onClose={handleReportModalClose} isFlix={isFlix(post)}/>
+                </div>,
+                document.body
+            )}
+            
+            {openAboutAccountModal && (
+                <div className="fixed inset-0 z-[100]">
+                    <AboutAccountModal userId={post.userId} onClose={handleAboutAccountModalClose} />
+                </div>
             )}
         </>
     )

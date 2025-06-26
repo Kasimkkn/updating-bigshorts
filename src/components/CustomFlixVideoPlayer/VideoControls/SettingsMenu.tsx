@@ -37,13 +37,13 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     <div className="relative flex">
         <button
             onClick={onToggleSettings}
-            className={`text-white transition-colors ${showSettings ? 'text-purple-400' : ''}`}
+            className={`text-text-color transition-colors ${showSettings ? 'text-purple-400' : ''}`}
         >
             <FiMoreVertical size={18} />
         </button>
 
         {showSettings && (
-            <div className={`absolute ${isMobile ? 'top-4 right-4' : 'bottom-full right-0 mb-2'} w-${isMobile ? '48' : '44'} bg-bg-color bg-opacity-90 rounded-md shadow-lg p-2 text-sm`}>
+            <div className={`absolute ${isMobile ? 'top-4 right-4' : 'bottom-full right-0 mb-2'} w-${isMobile ? '48' : '56'} bg-bg-color bg-opacity-90 rounded-md shadow-sm p-2 text-sm`}>
                 {!showQualitySettings && !showPlaybackSettings && (
                     <div className="space-y-1">
                         <button
@@ -66,7 +66,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 {showQualitySettings && (
                     <div className="space-y-1">
                         <div className="flex items-center px-2 py-1">
-                            <button onClick={onBack} className="mr-2 text-white">
+                            <button onClick={onBack} className="mr-2 text-text-color">
                                 <FiChevronLeft size={16} />
                             </button>
                             <span>Quality</span>
@@ -91,7 +91,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
                 {showPlaybackSettings && (
                     <div className="space-y-1">
                         <div className="flex items-center px-2 py-1">
-                            <button onClick={onBack} className="mr-2 text-white">
+                            <button onClick={onBack} className="mr-2 text-text-color">
                                 <FiChevronLeft size={16} />
                             </button>
                             <span>Playback Speed</span>

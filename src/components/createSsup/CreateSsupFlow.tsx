@@ -45,20 +45,20 @@ const CreateSsupFlow: React.FC<CreateSsupFlowProps> = ({ toggleCreatingOptions, 
     const pathname = usePathname();
 
     useEffect(() => {
-if (sharedPostData) {
+        if (sharedPostData) {
             // Set file type based on shared post
             if (sharedPostData.isForInteractiveVideo === 1) {
                 setFileType('video');
             } else if (sharedPostData.isForInteractiveImage === 1) {
                 setFileType('photo');
             }
-const interactiveVideo = JSON.parse(sharedPostData.interactiveVideo);
+            const interactiveVideo = JSON.parse(sharedPostData.interactiveVideo);
             // Ensure sharedPostData.videoFile is an array and get the first item
             const videoFilePath = interactiveVideo[0].path    // The first path in the array
             if (videoFilePath) {
                 // Trim the path to include only up to '.mp4' (remove anything after it)
                 const trimmedPath = videoFilePath.split('.mp4')[0] + '.mp4';
-setFileSrc(trimmedPath || null);
+                setFileSrc(trimmedPath || null);
                 setStep(2); // Set step to 2 to skip file selection and story details
             }
         }
@@ -66,7 +66,7 @@ setFileSrc(trimmedPath || null);
     }, [sharedPostData]);
 
     useEffect(() => {
-if (sharedSsupData) {
+        if (sharedSsupData) {
             // Set file type based on shared post
             if (sharedSsupData.stories[0].isForInteractiveVideo === 1) {
                 setFileType('video');
@@ -74,30 +74,30 @@ if (sharedSsupData) {
                 setFileType('photo');
             }
             const interactiveVideo = JSON.parse(sharedSsupData.stories[0].interactiveVideo);
-const videoFilePath = interactiveVideo[0].path    // The first path in the array
+            const videoFilePath = interactiveVideo[0].path    // The first path in the array
             if (videoFilePath) {
                 // Trim the path to include only up to '.mp4' (remove anything after it)
                 const trimmedPath = videoFilePath.split('.mp4')[0] + '.mp4';
-setFileSrc(trimmedPath || null);
+                setFileSrc(trimmedPath || null);
                 setStep(2); // Set step to 2 to skip file selection and story details
             }
         }
 
     }, [sharedSsupData]);
 
-const generateRandomBackdropGradient = () => {
-    const colors = [
-        [4290038721, 4282876145, 4282150078, 4284384858, 4284317899],
-        [4294901760, 4289003520, 4283453728, 4278190080, 4294967040],
-        [4278190335, 4278255360, 4278222848, 4278190080, 4279030271]
-    ];
-    
-    return {
-        begin: { x: -1, y: -1 },
-        colors: colors[Math.floor(Math.random() * colors.length)],
-        end: { x: 1, y: 1 }
+    const generateRandomBackdropGradient = () => {
+        const colors = [
+            [4290038721, 4282876145, 4282150078, 4284384858, 4284317899],
+            [4294901760, 4289003520, 4283453728, 4278190080, 4294967040],
+            [4278190335, 4278255360, 4278222848, 4278190080, 4279030271]
+        ];
+
+        return {
+            begin: { x: -1, y: -1 },
+            colors: colors[Math.floor(Math.random() * colors.length)],
+            end: { x: 1, y: 1 }
+        };
     };
-};
 
 
     const handleFileSelect = (file: File, type: FileType): Promise<any> => {
@@ -152,7 +152,7 @@ const generateRandomBackdropGradient = () => {
                 }
             } catch (error) {
                 setFileUploadLoading(false);
-}
+            }
         });
     };
 
@@ -167,7 +167,7 @@ const generateRandomBackdropGradient = () => {
         setSharedPostData(null)
         setSharedSsupData(null)
     };
-    
+
 
     const openThePopupForStoryDetails = () => {
         setStoryDetails(true);
@@ -195,7 +195,7 @@ const generateRandomBackdropGradient = () => {
                     const sanitizedFile = actualFileName.replace(/[^a-zA-Z0-9.-]/g, '_');
                     const finalFileName = `Bigshorts/Flix/${folder}/${generateUUID()}_${sanitizedFile}`;
                     const fileUrl = `https://d1332u4stxguh3.cloudfront.net/${finalFileName}`;
-const fileDetails = [{ fileName: finalFileName, contentType }];
+                    const fileDetails = [{ fileName: finalFileName, contentType }];
 
                     fetchPresignedUrls(fileDetails, contentType)
                         .then((responseUrls) => {
@@ -358,12 +358,12 @@ const fileDetails = [{ fileName: finalFileName, contentType }];
                 const file = new File([blob], `mainFile.${fileType === 'video' ? 'mp4' : 'jpg'}`, {
                     type: fileType === 'video' ? 'video/mp4' : 'image/jpeg'
                 });
-const result = await uploadFileToS3(
+                const result = await uploadFileToS3(
                     file,
                     fileType === 'video' ? 'InteractiveVideos' : 'InteractiveImages',
                     file.name
                 );
-mainFileUrl = result.fileUrl;
+                mainFileUrl = result.fileUrl;
                 uploadedCoverImage = mainFileUrl;
                 if (result.imageUrl) {
                     uploadedCoverImage = result.imageUrl;
@@ -377,14 +377,14 @@ mainFileUrl = result.fileUrl;
 
             // Upload interactive images if they exist
             const interactiveImages = finalJsondetails?.functionality_datas?.list_of_images?.map(image => image.img_path) || [];
-const uploadedInteractiveImages = await Promise.all(
+            const uploadedInteractiveImages = await Promise.all(
                 interactiveImages.map(async (imagePath, index) => {
                     if (imagePath && !imagePath.startsWith('http') && !imagePath.startsWith('https')) {
                         try {
                             const imageResponse = await fetch(imagePath);
                             const imageBlob = await imageResponse.blob();
                             const fileName = `interactive_${index}.jpg`;
-const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
+                            const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
                             return result.fileUrl;
                         } catch (error) {
                             console.error(`Error uploading interactive image ${index}:`, error);
@@ -394,7 +394,7 @@ const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
                     return imagePath; // Already a URL, no need to upload
                 })
             );
-// Update finalJsondetails to use the uploaded image URLs
+            // Update finalJsondetails to use the uploaded image URLs
             if (finalJsondetails && finalJsondetails.functionality_datas && finalJsondetails.functionality_datas.list_of_images) {
                 const updatedImages = finalJsondetails.functionality_datas.list_of_images.map((image, index) => {
                     if (uploadedInteractiveImages[index]) {
@@ -408,7 +408,7 @@ const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
 
                 finalJsondetails.functionality_datas.list_of_images = updatedImages;
             }
-            const backdropGradient =  generateRandomBackdropGradient();
+            const backdropGradient = generateRandomBackdropGradient();
 
             const userData = {
                 imagefile: uploadedCoverImage ?? null,
@@ -423,8 +423,8 @@ const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
                 hashArray: [],
                 friendArray: [],
                 isForVideo: fileType === 'video',
-                isForInteractiveVideo:  (finalJsondetails?.functionality_datas?.snip_share?.snipItem || finalJsondetails?.functionality_datas?.ssup_share)? 0 : fileType === 'video' ? 1 : 0,
-                isForInteractiveImage: (finalJsondetails?.functionality_datas?.snip_share?.snipItem || finalJsondetails?.functionality_datas?.ssup_share) ? 1 : fileType === 'photo'? 1 : 0,
+                isForInteractiveVideo: (finalJsondetails?.functionality_datas?.snip_share?.snipItem || finalJsondetails?.functionality_datas?.ssup_share) ? 0 : fileType === 'video' ? 1 : 0,
+                isForInteractiveImage: (finalJsondetails?.functionality_datas?.snip_share?.snipItem || finalJsondetails?.functionality_datas?.ssup_share) ? 1 : fileType === 'photo' ? 1 : 0,
                 is_selcted: false,
                 isForAll: 1,
                 audioDuration: Number(audioDuration) || 0,
@@ -449,14 +449,14 @@ const result = await uploadFileToS3(imageBlob, 'coverFiles', fileName);
                 totalBlankVideoContent: "-1",
                 totalVideoCount: "1",
             };
-setStoryDetails(false);
+            setStoryDetails(false);
 
             const response = await createPostForS3(userData);
             if (response?.isSuccess) {
-if(pathname){
-                    if(pathname.endsWith('/followers')){
+                if (pathname) {
+                    if (pathname.endsWith('/followers')) {
                         setShouldRefreshPosts(true);
-                    } else if(pathname.endsWith('/profile')){
+                    } else if (pathname.endsWith('/profile')) {
                         setShouldRefreshProfileStory(true)
                     }
                 }
@@ -471,7 +471,7 @@ if(pathname){
             handleClose();
         }
     };
-    
+
     return (
         <CreationCommonModal
             onClose={handleClose}
@@ -487,7 +487,7 @@ if(pathname){
             height="h-[90vh]"
             isFileSelectionSkipped={!!sharedPostData || !!sharedSsupData}
             renderStepContent={(step) => {
-                if (step === 1 && (!sharedPostData || !sharedSsupData )) {
+                if (step === 1 && (!sharedPostData || !sharedSsupData)) {
                     return (
                         <CreateSsupModal
                             onClose={handleClose}
@@ -512,12 +512,12 @@ if(pathname){
                                 sharedPostData?.isForInteractiveVideo === 1
                                     ? 'video'
                                     : sharedPostData?.isForInteractiveImage === 1
-                                    ? 'photo'
-                                    : sharedSsupData?.isForInteractiveVideo === 1
-                                    ? 'video'
-                                    : sharedSsupData?.isForInteractiveImage === 1
-                                    ? 'photo'
-                                    : fileType
+                                        ? 'photo'
+                                        : sharedSsupData?.isForInteractiveVideo === 1
+                                            ? 'video'
+                                            : sharedSsupData?.isForInteractiveImage === 1
+                                                ? 'photo'
+                                                : fileType
                             }
                             duration={audioDetails?.audioDuration}
                             storyDetails={storyDetails}
@@ -532,7 +532,7 @@ if(pathname){
                 return null;
             }}
             renderActionButtons={(step) => {
-                if (step > 1 && step<=3) {
+                if (step > 1 && step <= 3) {
                     return storyDetails ? (
                         <button onClick={finalSubmit} className="text-text-color">
                             Share

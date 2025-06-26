@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HiOutlineMenu } from "react-icons/hi";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { MdOutlineAccountBalanceWallet, MdOutlineChat, MdSearch } from "react-icons/md";
+import { MdOutlineAnalytics, MdOutlineChat, MdSearch } from "react-icons/md";
 
 type MobileHeaderProps = {
     userData: ProfileData | null;
@@ -36,7 +36,7 @@ const MobileHeader = ({ userData, toggleSettings, toggleNotification, toggleSear
                 </button>
                 {pathName === '/home/profile' ? 
                 (<button onClick={toggleAccountOverview}>
-                    <MdOutlineAccountBalanceWallet className="w-7 h-7 text-text-color" />
+                    <MdOutlineAnalytics className="w-7 h-7 text-text-color" />
                 </button>) :
                 (<button onClick={toggleNotification}>
                     <IoMdNotificationsOutline className="w-7 h-7 text-text-color" />

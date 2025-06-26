@@ -66,19 +66,18 @@ const AboutAccountModal = ({ onClose, userId }: AboutAccountModalProps) => {
                 src={profileData?.profileimage}
                 width="w-20"
                 height="h-20"
-                name="Dhyaan Shah"
               />
-              <div className="flex flex-col ml-3">
+              <div className="text-start flex flex-col ml-3">
                 <p className="text-xl font-semibold">{profileData?.name}</p>
                 <p className="text-sm">@{profileData?.username}</p>
               </div>
             </div>
 
-            <p className="text-lg font-semibold">Account Information</p>
+            <p className="text-start text-lg font-semibold">Account Information</p>
 
             <div className="flex items-center">
               <FaUserCircle size={30} />
-              <div className="flex flex-col ml-3">
+              <div className="text-start flex flex-col ml-3">
                 <p className="text-sm">Gender</p>
                 <p className="text-md font-semibold">
                   {profileData?.gender
@@ -89,9 +88,9 @@ const AboutAccountModal = ({ onClose, userId }: AboutAccountModalProps) => {
               </div>
             </div>
 
-            <p className="text-lg font-semibold">Account History</p>
+            <p className="text-start text-lg font-semibold">Account History</p>
 
-            <div className="flex items-center">
+            <div className="text-start flex items-center">
               <IoCalendarClearOutline size={30} />
               <div className="flex flex-col ml-3">
                 <p className="text-sm">Joined</p>

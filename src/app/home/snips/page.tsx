@@ -1,6 +1,5 @@
 "use client";
 import CommentsSection from "@/components/CommentUi/CommentUi";
-import ReportModal from "@/components/modal/ReportModal";
 import SharePostModal from "@/components/modal/SharePostModal";
 import MoreOptions from "@/components/MoreOptions";
 import PostActivity from "@/components/posts/shared/PostActivity";
@@ -46,7 +45,6 @@ const SnipsPage = () => {
   const [showMuteOverlay, setShowMuteOverlay] = useState<boolean>(false);
   const [openMoreOptions, setOpenMoreOptions] = useState<number | null>(null)
   const [openShareModal, setOpenShareModal] = useState<number | null>(null)
-  const [openReportModal, setOpenReportModal] = useState<number | null>(null)
   const [currentVideoLikeDetails, setCurrentVideoLikeDetails] = useState<LikeCountData | null>(null)
   const [linkedPost, setLinkedPost] = useState<PostlistItem | null>(null);
   const [showLinkedContent, setShowLinkedContent] = useState(false);
@@ -700,7 +698,6 @@ const SnipsPage = () => {
                       post={currentPost}
                       setIsOpen={setOpenMoreOptions}
                       isSnipsPage={true}
-                      openReport={setOpenReportModal}
                       updatePost={updatePost}
                       page="snips"
                     />
@@ -765,7 +762,6 @@ const SnipsPage = () => {
             </div>
           )}
           {openShareModal && <SharePostModal data={currentPost} type={4} onClose={() => { setOpenShareModal(null) }} postId={currentPost.postId} updatePost={updatePost} />}
-          {openReportModal && <ReportModal postId={currentPost.postId} onClose={() => { setOpenReportModal(null) }} />}
         </div>
       )}
     </div>

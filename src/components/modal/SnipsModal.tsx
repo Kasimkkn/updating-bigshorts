@@ -1,6 +1,5 @@
 "use client";
 import CommentsSection from "@/components/CommentUi/CommentUi";
-import ReportModal from "@/components/modal/ReportModal";
 import SharePostModal from "@/components/modal/SharePostModal";
 import MoreOptions from "@/components/MoreOptions";
 import VideoPlayerWidget from "@/components/VideoAndImagesComp/VideoPlayerWidget";
@@ -666,7 +665,6 @@ const SnipsModal: React.FC<SnipsModalProps> = ({ snips, selectedSnip, onClose, s
                         post={currentPost}
                         setIsOpen={setOpenMoreOptions}
                         isSnipsPage={true}
-                        openReport={setOpenReportModal}
                         updatePost={updatePost}
                         page="snips"
                       />
@@ -716,7 +714,6 @@ const SnipsModal: React.FC<SnipsModalProps> = ({ snips, selectedSnip, onClose, s
                 </div>
               )}
               {openShareModal && <SharePostModal data={currentPost} type={4} onClose={() => { setOpenShareModal(null) }} postId={currentPost.postId} updatePost={updatePost} />}
-              {openReportModal && <ReportModal postId={currentPost.postId} onClose={() => { setOpenReportModal(null) }} />}
             </div>
           )}
         </div>

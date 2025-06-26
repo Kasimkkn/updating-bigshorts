@@ -54,8 +54,6 @@ const Flix: React.FC<FlixProps> = ({ postData, loadMorePosts, refreshPage }) => 
   const {
     openMoreOptions,
     setOpenMoreOptions,
-    isReportModalOpen,
-    isAboutAccountModalOpen,
     isModalOpen,
     setIsModalOpen,
     isPostsModalOpen,
@@ -68,8 +66,6 @@ const Flix: React.FC<FlixProps> = ({ postData, loadMorePosts, refreshPage }) => 
     setPostInsightsData,
     isPostUsersModalOpen,
     setIsPostUsersModalOpen,
-    openReportModal,
-    openAboutAccountModal
   } = usePostModals();
 
   useInfiniteScroll(loadMorePosts);
@@ -161,8 +157,6 @@ const Flix: React.FC<FlixProps> = ({ postData, loadMorePosts, refreshPage }) => 
                 postId: post.postId,
                 isForCollaborators: true
               })}
-              onReport={openReportModal}
-              onAboutAccount={openAboutAccountModal}
               updatePost={updatePost}
               iconVariant="horizontal"
             />
@@ -243,11 +237,7 @@ const Flix: React.FC<FlixProps> = ({ postData, loadMorePosts, refreshPage }) => 
           setPostInsightsData(null);
           setPostInsightsModalCoverfile({ image: '', aspect: 0.75 });
         }}
-        isReportModalOpen={isReportModalOpen}
         fecthVideoPostInsights={fetchVideoInsights}
-        onReportClose={() => openReportModal(0)}
-        isAboutAccountModalOpen={isAboutAccountModalOpen}
-        onAboutAccountClose={() => openAboutAccountModal(0)}
         isPostUsersModalOpen={isPostUsersModalOpen}
         taggedUsers={[]}
         onPostUsersClose={() => setIsPostUsersModalOpen(null)}

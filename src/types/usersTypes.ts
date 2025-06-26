@@ -44,6 +44,7 @@ export interface ProfileData {
     isRequested: number,
     hasRequested: number,
     isFriend: number,
+    isUserFriend:number,
     socialMediaLinks: [],
     isBigshortsOriginal: number,
 }

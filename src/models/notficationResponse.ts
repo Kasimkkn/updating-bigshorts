@@ -12,6 +12,7 @@ export interface NotificationData {
     notificationType: string;
     notificationDetail: string;
     notificationTime: string;
+    isUserFriend:number;
     isFriend: number;
     isPrivateAccount: number;
     isRequested: number;

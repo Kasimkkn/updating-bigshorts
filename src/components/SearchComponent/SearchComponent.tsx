@@ -400,7 +400,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
   }, [searchTerm, activeTab, handleSearch]);
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col justify-center text-text-color">
       {/* Add a backdrop when dropdown is open */}
       {(isSearching || searchResults.length > 0 || searchTerm.trim()) && showDropdown && (
         <div
@@ -418,7 +418,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
           }
         }}
       >
-        <div className="flex-1 max-w-3xl mx-auto relative">
+        <div className="w-full max-w-3xl mx-auto relative">
           <SearchBar
             placeholder="Search..."
             className="w-full"
@@ -429,7 +429,7 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
           />
 
           {(!isSearching && searchResults.length === 0 && dropdownStyle === "style2" && searchTerm.trim() === "") && (
-            <div>
+            <div className="w-full">
               {/* Clear all button shown only if anything exists */}
               {(recentSearchUsers.length > 0 || recentSearchMinis.length > 0 || recentSearchSnips.length > 0) && (
                 <div className="flex justify-end mb-2">
@@ -453,17 +453,17 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
                         className="flex items-center justify-between bg-hover-color hover:bg-secondary-bg-color p-2 rounded group"
                       >
                         <div
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex items-center gap-2 cursor-pointer  flex-grow overflow-hidden"
                           onClick={() => handleRecentMiniSearch(item.id)}
                         >
                           <Avatar src={item.coverFile} width="w-10" height="h-10" />
-                          <div className="text-sm">
-                            <p className="font-medium">{item.title}</p>
+                          <div className="text-sm flex-1 overflow-hidden">
+                            <p className="font-medium truncate">{item.title}</p>
                             <p className="text-xs text-muted">{item.username}</p>
                           </div>
                         </div>
                         <button
-                          className="text-text-color hover:text-red-500 text-sm ml-4"
+                          className="flex-shrink-0 text-text-color hover:text-red-500 text-sm ml-4"
                           onClick={() => removeSearch(index)}
                         >
                           ✕
@@ -485,14 +485,14 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
                         className="flex items-center justify-between bg-hover-color hover:bg-secondary-bg-color p-2 rounded group"
                       >
                         <div
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex items-center gap-2 cursor-pointer "
                           onClick={() => handleRecentUserSearch(item.userId)}
                         >
                           <Avatar src={item.userProfileImage} width="w-10" height="h-10" />
                           <span className="text-sm">{item.username}</span>
                         </div>
                         <button
-                          className="text-text-color hover:text-red-500 text-sm ml-4"
+                          className="flex-shrink-0 text-text-color hover:text-red-500 text-sm ml-4"
                           onClick={() => removeSearch(index)}
                         >
                           ✕
@@ -514,13 +514,13 @@ const SearchComponent = ({ dropdownStyle = "style1", toggleSearch, toggleSidebar
                         className="flex items-center justify-between bg-hover-color hover:bg-secondary-bg-color p-2 rounded group"
                       >
                         <div
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex items-center gap-2 cursor-pointer flex-grow overflow-hidden"
                           onClick={() => handleRecentSnipSearch(item.postId)}
                         >
                           <Avatar src={item.coverFile} width="w-10" height="h-10" />
-                          <div className="text-sm">
-                            <p className="font-medium text-white">{item.postTitle}</p>
-                            <p className="text-xs text-muted text-white">{item.username}</p>
+                          <div className="flex-1 text-sm overflow-hidden">
+                            <p className="font-medium truncate">{item.postTitle}</p>
+                            <p className="text-xs text-muted">{item.username}</p>
                           </div>
                         </div>
                         <button

@@ -33,6 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
                     notificationType: "",
                     notificationDetail: "",
                     isFriend: 0,
+                    isUserFriend:0,
                     isPrivateAccount: 0,
                     isRequested: 0,
                     notificationTime: "",

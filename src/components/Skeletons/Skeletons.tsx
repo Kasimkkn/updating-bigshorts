@@ -711,7 +711,7 @@ export const ProfilePageSkeleton = () => (
 
 export const ProfileContentSkeleton = () => (
     <div className='flex items-center justify-center animate-pulse'>
-        <div className="inline-block w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-md animate-spin"></div>
+        <div className="inline-block w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
 );
 

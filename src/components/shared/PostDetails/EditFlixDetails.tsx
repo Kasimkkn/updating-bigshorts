@@ -413,7 +413,8 @@ const EditFlixDetails: React.FC<EditFlixDetailsProps> = ({
                     setThumbnail={setCoverFileImage}
                     onClose={() => setIsThumbnailPickerOpen(false)}
                     videoUrl={videoUrl}
-                    isFor="snip"
+                    isFor="flix"
+                    defaultThumbnail={coverFileImage || undefined}
                 />
             }
         </>

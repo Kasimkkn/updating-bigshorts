@@ -499,11 +499,11 @@ const UserPage = () => {
                       profileData.isRequested
                     )
                   }
-                  className="max-md:text-sm border-2 border-border-color  font-bold flex justify-center items-center p-2 rounded-md w-full"
+                  className="max-md:text-sm border-2 border-border-color font-bold flex justify-center items-center p-2 rounded-md w-full"
                 >
-                  <p className='linearText'>Follow</p>
+                  <p className='linearText'>{profileData.isUserFriend === 1 ? 'Follow Back' : 'Follow'}</p>
                 </button>
-              ) : (
+                ) : (
                 <button
                   onClick={() =>
                     handleButtonClick(
@@ -513,9 +513,9 @@ const UserPage = () => {
                       profileData.isRequested
                     )
                   }
-                  className="max-md:text-sm border-2 border-border-color  font-bold flex justify-center items-center p-2 rounded-md w-full"
+                  className="max-md:text-sm border-2 border-border-color font-bold flex justify-center items-center p-2 rounded-md w-full"
                 >
-                  <p className='linearText'>Follow</p>
+                  <p className='linearText'>{profileData.isUserFriend === 1 ? 'Follow Back' : 'Follow'}</p>
                 </button>
               )}
             </div>

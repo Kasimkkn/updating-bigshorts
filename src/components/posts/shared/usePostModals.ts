@@ -4,8 +4,6 @@ import { ViewReactionsPostData } from '@/models/viewReactionsPostResponse';
 
 export const usePostModals = () => {
     const [openMoreOptions, setOpenMoreOptions] = useState<number | null>(null);
-    const [isReportModalOpen, setIsReportModalOpen] = useState<number | null>(null);
-    const [isAboutAccountModalOpen, setIsAboutAccountModalOpen] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPostsModalOpen, setIsPostsModalOpen] = useState(false);
     const [postInsightsModalCoverfile, setPostInsightsModalCoverfile] = useState<{ image: string, aspect: number }>({ image: '', aspect: 0 });
@@ -14,18 +12,8 @@ export const usePostModals = () => {
     const [isPostUsersModalOpen, setIsPostUsersModalOpen] = useState<{ postId: number, isForCollaborators: boolean } | null>(null);
     const [contentTreeOpen, setContentTreeOpen] = useState<{ postId: number } | null>(null);
 
-    const openReportModal = (postId: number) => {
-        setIsReportModalOpen(postId);
-    };
-
-    const openAboutAccountModal = (userId: number) => {
-        setIsAboutAccountModalOpen(userId);
-    };
-
     const closeAllModals = () => {
         setOpenMoreOptions(null);
-        setIsReportModalOpen(null);
-        setIsAboutAccountModalOpen(null);
         setIsModalOpen(false);
         setIsPostsModalOpen(false);
         setInsightsData(null);
@@ -38,8 +26,6 @@ export const usePostModals = () => {
     return {
         openMoreOptions,
         setOpenMoreOptions,
-        isReportModalOpen,
-        isAboutAccountModalOpen,
         isModalOpen,
         setIsModalOpen,
         isPostsModalOpen,
@@ -54,8 +40,6 @@ export const usePostModals = () => {
         setIsPostUsersModalOpen,
         contentTreeOpen,
         setContentTreeOpen,
-        openReportModal,
-        openAboutAccountModal,
         closeAllModals
     };
 };

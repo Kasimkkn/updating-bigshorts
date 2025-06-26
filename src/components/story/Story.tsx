@@ -80,6 +80,7 @@ const Story = () => {
         const loggedInUserStories = stories.filter(
           (story) => story.userId === loggedInuserId
         );
+        console.log("loggedInUserStories", loggedInUserStories);
         const otherStories = stories.filter(
           (story) => story.userId !== loggedInuserId
         );
@@ -188,6 +189,8 @@ const Story = () => {
       />
     );
   }
+
+
   return (
     <div className="pt-0 pb-2 py-4">
       <div className="overflow-x-auto whitespace-nowrap">
@@ -293,9 +296,10 @@ const Story = () => {
                           ) : (
                             story.isFriend ? (
                               <SafeImage
-                                src={story.userProfileImage || (typeof dummyUser === 'string' ? dummyUser : dummyUser.src)}
+                                src={story.userProfileImage}
                                 className="w-full h-full object-cover rounded-full text-sm"
                                 alt="profile image"
+                                type='dummyUser'
                               />
                             ) : (
                               <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">

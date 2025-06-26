@@ -10,7 +10,7 @@ const SafeImage = ({ src, alt, videoUrl, type="errorWidget", ...props }: SafeIma
     const [showError, setShowError] = useState(false);
     const imgRef = useRef<HTMLImageElement>(null);
 
-    const initialSrc = src && src.endsWith(".webp") ? src : `${src}.webp`;
+    const initialSrc = src && typeof src === 'string' && src.endsWith(".webp") ? src : `${src}.webp`;
 
     // Reset error state when src or videoUrl changes
     useEffect(() => {
@@ -35,7 +35,7 @@ const SafeImage = ({ src, alt, videoUrl, type="errorWidget", ...props }: SafeIma
     }
 
     return (
-        !showError || !src ? 
+        !showError && src ? 
             <img
                 ref={imgRef}
                 {...props}

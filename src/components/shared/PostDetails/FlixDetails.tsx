@@ -625,6 +625,8 @@ const FlixDetails = ({ onSubmit, coverFileImage, finalSubmitLoading, setFlixInfo
 							setThumbnail={setCoverFileImage}
 							onClose={() => setIsThumbnailPickerOpen(false)}
 							videoUrl={videoUrl}
+							isFor='flix'
+							defaultThumbnail= {coverFileImage || undefined}
 						/>
 					}
 				</div>

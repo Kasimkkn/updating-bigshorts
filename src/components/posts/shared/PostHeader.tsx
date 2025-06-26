@@ -14,8 +14,6 @@ interface PostHeaderProps {
     openMoreOptions: number | null;
     setOpenMoreOptions: Dispatch<SetStateAction<number | null>>;
     onUserClick: (userId: number) => void;
-    onReport?: (postId: number) => void;
-    onAboutAccount?: (userId: number) => void;
     updatePost?: (postId: number, property: string, isBeforeUpdate: number) => void;
     showFollowButton?: boolean;
     isInteractiveVideo?: boolean;
@@ -31,8 +29,6 @@ const PostHeader: React.FC<PostHeaderProps> = ({
     openMoreOptions,
     setOpenMoreOptions,
     onUserClick,
-    onReport,
-    onAboutAccount,
     updatePost,
     showFollowButton = true,
     isInteractiveVideo = false,
@@ -61,7 +57,7 @@ const PostHeader: React.FC<PostHeaderProps> = ({
                 <button onClick={() => onUserClick(postUserId)} className="flex items-center">
                     <Avatar src={postUserProfileImage} name={postUserFullName || postUserName} />
                     <div className="ml-2 flex flex-col">
-                        <p className={`font-bold ${textColor}`}>
+                        <p className={`text-start font-bold ${textColor}`}>
                             <span>{postUserName}</span>
                             {collaboratorCount > 0 && (
                                 <span
@@ -110,14 +106,12 @@ const PostHeader: React.FC<PostHeaderProps> = ({
                     onClick={() => setOpenMoreOptions(postId)}
                 >
                     <IconComponent />
-                    {openMoreOptions === postId && onReport && onAboutAccount && updatePost && (
+                    {openMoreOptions === postId && updatePost && (
                         <MoreOptions
                             post={post as PostlistItem}
                             setIsOpen={setOpenMoreOptions}
-                            openReport={onReport}
                             updatePost={updatePost}
                             page="followers"
-                            openAboutAccount={onAboutAccount}
                         />
                     )}
                 </button>

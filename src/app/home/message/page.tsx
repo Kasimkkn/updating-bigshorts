@@ -59,6 +59,7 @@ const MessagePage = () => {
         setSelectedUser(chatId);
         setMessageUserId(userId);
         setChatUserId(userId);
+        setShowReplyInput(false);
     }, [setMessageUserId]);
 
     const handleBack = useCallback(() => {

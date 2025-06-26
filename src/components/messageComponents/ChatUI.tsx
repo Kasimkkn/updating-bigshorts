@@ -1347,7 +1347,17 @@ return storyData;
                             </button>
                         )}
                     </div>
-                    {inputValue.trim() ? (
+
+                    {/* Comment this button and Uncomment the below code to enable voice recording feature */}
+
+                    <button
+                        onClick={handleMessageSubmit}
+                        className="flex-shrink-0 w-[50px] h-[50px] flex justify-center items-center rounded-full bg-onTertiary hover:bg-hover-bg-color text-message-primary-text-color hover:text-message-text-color transition-colors"
+                    >
+                        <IoSendSharp className="w-5 h-5" />
+                    </button>
+
+                    {/* {inputValue.trim() ? (
                         <button
                             onClick={handleMessageSubmit}
                             className="flex-shrink-0 w-[50px] h-[50px] flex justify-center items-center rounded-full bg-onTertiary hover:bg-hover-bg-color text-message-primary-text-color hover:text-message-text-color transition-colors"
@@ -1368,7 +1378,7 @@ return storyData;
                         >
                             <MdMic className="w-5 h-5" />
                         </button>
-                    )}
+                    )} */}
                 </div>
             </div>
         )

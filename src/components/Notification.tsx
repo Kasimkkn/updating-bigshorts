@@ -34,6 +34,7 @@ type NotificationData = {
     notificationDetail: string;
     notificationTime: string;
     isFriend: number;
+    isUserFriend:number;
     isPrivateAccount: number;
     isRequested: number;
     isAccepted: number;
@@ -289,12 +290,13 @@ const Notification = ({
                                                 }
                                                 return rest ? (
                                                     <button
-                                                        onClick={() => handleRedirect('snips', item.postId)}
-                                                        className="font-normal text-text-color focus:outline-none inline-block text-left"
-                                                        style={{ background: 'none', border: 'none', padding: 0 }}
-                                                    >
-                                                        {rest}
-                                                    </button>
+                                                    onClick={() => handleRedirect('snips', item.postId)}
+                                                    className="font-normal text-text-color focus:outline-none inline-block text-left truncate max-w-[120px]"
+                                                    style={{ background: 'none', border: 'none', padding: 0 }}
+                                                    title={rest}
+                                                >
+                                                    {rest}
+                                                </button>
                                                 ) : null;
                                             })()}
                                         </div>
@@ -315,20 +317,20 @@ const Notification = ({
                                                 <button className="linearBorder p-2 text-xs linearText rounded-sm max-md:text-xs">
                                                     Requested
                                                 </button>
-                                            ) : item.isPrivateAccount === 1 ? (
-                                                <button
-                                                    onClick={() => handleButtonClick(item.userId, item.isFriend, item.isPrivateAccount, item.isRequested)}
-                                                    className="linearBorder p-2 text-xs linearText rounded-sm max-md:text-xs"
-                                                >
-                                                    Follow
-                                                </button>
+                                           ) : item.isPrivateAccount === 1 ? (
+                                            <button
+                                            onClick={() => handleButtonClick(item.userId, item.isFriend, item.isPrivateAccount, item.isRequested)}
+                                            className="linearBorder p-1 px-2 text-xs linearText rounded-sm max-md:text-xs min-w-[70px] flex-shrink-0"
+                                            >
+                                             {item.isUserFriend === 1 ? 'Follow Back' : 'Follow'}
+                                            </button>
                                             ) : (
-                                                <button
-                                                    onClick={() => handleButtonClick(item.userId, item.isFriend, item.isPrivateAccount, item.isRequested)}
-                                                    className="linearBorder p-2 text-xs linearText rounded-sm max-md:text-xs"
-                                                >
-                                                    Follow
-                                                </button>
+                                            <button
+                                            onClick={() => handleButtonClick(item.userId, item.isFriend, item.isPrivateAccount, item.isRequested)}
+                                            className="linearBorder p-1 px-2 text-xs linearText rounded-sm max-md:text-xs min-w-[70px] flex-shrink-0"
+                                            >
+                                             {item.isUserFriend === 1 ? 'Follow Back' : 'Follow'}
+                                            </button>
                                             )
                                         ) : item.notificationType === "POST_COMMENT" || item.notificationType === "POST_LIKE" ? (
                                             <>

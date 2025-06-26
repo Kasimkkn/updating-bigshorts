@@ -28,7 +28,7 @@ const EditSnipModal = ({ post, onClose, isSnipsPage }: EditSnipModalProps) => {
     });
 
     const [loading, setLoading] = React.useState(false);
-    const [coverFileImage, setCoverFileImage] = React.useState('');
+    const [coverFileImage, setCoverFileImage] = React.useState(post.coverFile || '');
     const [videoUrl, setVideoUrl] = React.useState('');
     const [collaborators, setCollaborators] = useState<{userId: number, profileImage: string}[]>([]);
 

@@ -17,10 +17,6 @@ interface PostModalsProps {
     postInsightsData: ViewReactionsPostData | null;
     aspect: number;
     onPostInsightsClose: () => void;
-    isReportModalOpen: number | null;
-    onReportClose: () => void;
-    isAboutAccountModalOpen: number | null;
-    onAboutAccountClose: () => void;
     isPostUsersModalOpen: { postId: number; isForCollaborators: boolean } | null;
     taggedUsers: any[];
     onPostUsersClose: () => void;
@@ -36,10 +32,6 @@ const PostModals: React.FC<PostModalsProps> = ({
     postInsightsData,
     aspect,
     onPostInsightsClose,
-    isReportModalOpen,
-    onReportClose,
-    isAboutAccountModalOpen,
-    onAboutAccountClose,
     isPostUsersModalOpen,
     taggedUsers,
     onPostUsersClose
@@ -63,20 +55,6 @@ const PostModals: React.FC<PostModalsProps> = ({
                     data={postInsightsData}
                     postInsightsModalCoverfile={postInsightsModalCoverfile}
                     aspect={aspect}
-                />
-            )}
-
-            {isReportModalOpen && (
-                <ReportModal
-                    postId={isReportModalOpen}
-                    onClose={onReportClose}
-                />
-            )}
-
-            {isAboutAccountModalOpen && (
-                <AboutAccountModal
-                    userId={isAboutAccountModalOpen}
-                    onClose={onAboutAccountClose}
                 />
             )}
 

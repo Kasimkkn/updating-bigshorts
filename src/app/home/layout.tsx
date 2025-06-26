@@ -43,6 +43,10 @@ const Layout = ({ children }: LayoutProps) => {
   const shouldHideMobileHeader = pathname === '/home/message' || pathname === '/home/snips';
   const showSearchBar = pathname === "/home" || pathname === "/home/search";
 
+  // Define routes where sidebar should be collapsed
+  const collapsedRoutes = ['/home/playlist', '/home/series', '/home/flix'];
+  const shouldCollapse = collapsedRoutes.some(route => pathname?.startsWith(route));
+
   useEffect(() => {
     setIsClient(true);
     setShowPages(true);
@@ -84,13 +88,13 @@ const Layout = ({ children }: LayoutProps) => {
     toggleNotification,
     toggleSearch,
     toggleSettings,
-    toggleAccountOverview
+    toggleAccountOverview,
+    setIsSideBarOpen
   } = useUIState();
 
   const {
     userData
   } = useUserProfile();
-
 
   useEffect(() => {
     if (userData) {
@@ -108,13 +112,23 @@ const Layout = ({ children }: LayoutProps) => {
     fetchNotificationAlert
   } = useLayoutApi(isNotificationOpen, isPrivateAccount);
 
-
   useEffect(() => {
     if (isClient) {
       fetchMessageCount();
       fetchNotificationAlert();
     }
   }, [isClient, fetchMessageCount, fetchNotificationAlert]);
+
+  // Calculate the correct padding based on sidebar state and route
+  const getMainPadding = () => {
+    if (isMobile) return ''; // No padding on mobile
+
+    // If sidebar is expanded and not on collapsed routes
+    if (isSideBarOpen && !shouldCollapse) return 'pl-56';
+
+    // If sidebar is collapsed or on collapsed routes
+    return 'pl-16';
+  };
 
   if (!isClient) {
     return (
@@ -140,6 +154,7 @@ const Layout = ({ children }: LayoutProps) => {
         {!storyViewOpen && (
           <SideBar
             isSideBarOpen={isSideBarOpen}
+            setIsSideBarOpen={setIsSideBarOpen}
             toggleSidebar={toggleSidebar}
             toggleSettings={toggleSettings}
             toggleSearch={toggleSearch}
@@ -149,9 +164,8 @@ const Layout = ({ children }: LayoutProps) => {
           />
         )}
 
-        <main className={`text-text-color bg-bg-color transition-all duration-300 ${isSideBarOpen ? "pl-56" : "md:pl-16"
-          } w-screen overflow-y-hidden`}>
-
+        <main className={`text-text-color bg-bg-color transition-all duration-300 ${getMainPadding()}
+          w-screen overflow-y-hidden`}>
           {/* Conditionally render MobileHeader based on path and device */}
           {isMobile && !shouldHideMobileHeader && (
             <MobileHeader

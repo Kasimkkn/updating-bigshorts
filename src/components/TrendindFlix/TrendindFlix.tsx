@@ -46,7 +46,6 @@ export default function TrendingFlix() {
     const [error, setError] = useState<string | null>(null);
     const [showMoreLoading, setShowMoreLoading] = useState(false);
     const [openMoreOptions, setOpenMoreOptions] = useState<number | null>(null);
-    const [openReportModal, setOpenReportModal] = useState<number | null>(null);
     const [seriesList, setSeriesList] = useState<Series[]>([]);
     const [isSeriesLoading, setisSeriesLoading] = useState<boolean>(false)
     const [openSeries, setOpenSeries] = useState<number | null>(null);
@@ -740,7 +739,7 @@ export default function TrendingFlix() {
                 <p className="text-xl font-bold my-2 p-3 md:pl-4 pt-4">Minis For You</p>
                 <div className="w-full p-4">
                     {/* Regular grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-8 w-full mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full mb-8">
                         {posts.map((video, index) => {
                             const currentPageForPost = Math.floor(index / 8) + 1;
                             const shouldShowHorizontalAfter = showHorizontalOnPage.includes(currentPageForPost) &&
@@ -788,11 +787,10 @@ export default function TrendingFlix() {
                                                         className="w-6 flex-shrink-0 relative"
                                                     >
                                                         <FaEllipsisVertical className="text-text-color" />
-                                                        {openMoreOptions === video.postId && <MoreOptions post={video} setIsOpen={setOpenMoreOptions} openReport={setOpenReportModal} updatePost={updatePost} page='flix' />}
+                                                        {openMoreOptions === video.postId && <MoreOptions post={video} setIsOpen={setOpenMoreOptions} updatePost={updatePost} page='flix' />}
                                                     </button>
                                                 </div>
                                             </div>
-                                            {openReportModal && <ReportModal postId={video.postId} onClose={() => { setOpenReportModal(null) }} />}
                                         </div>
                                     </div>
 

@@ -1,4 +1,3 @@
-import dummyUser from '@/assets/user.png';
 import { useCreationOption } from '@/context/useCreationOption';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { savePostShare } from '@/services/savepostshare';
@@ -345,11 +344,11 @@ const SharePostModal = ({ onClose, postId, type = 2, data, updatePost, userInfo,
     }
 
     return (
-        <CommonModalLayer width={isModal ? 'max-w-md' : 'xl:w-full max-xl:max-w-md'} height={isModal ? 'h-[70vh]' : 'h-[70vh] xl:h-full'} onClose={onClose}
+        <CommonModalLayer width={isModal ? 'wfull md:max-w-md' : 'w-full md:max-w-md xl:w-full'} height={isModal ? 'h-[70vh]' : 'h-[70vh] xl:h-full'} onClose={onClose}
             isModal={false}
             hideCloseButtonOnMobile={true}
         >
-            <div className="bg-primary-bg-color h-full max-w-4xl md:p-4 md:rounded-md w-full flex flex-col">
+            <div className={`bg-primary-bg-color h-full md:p-4 md:rounded-md w-full flex flex-col ${isModal ? 'wfull md:max-w-md' : 'w-full md:max-w-md xl:w-full'}`}>
                 <span className="font-semibold p-2">{selectedUsers.length} Selected</span>
 
                 <div className="m-2">
@@ -377,9 +376,10 @@ const SharePostModal = ({ onClose, postId, type = 2, data, updatePost, userInfo,
                                     <div className="w-full relative">
                                         <SafeImage
                                             onContextMenu={(e) => e.preventDefault()}
-                                            src={user.userProfileImage || (typeof dummyUser === 'string' ? dummyUser : dummyUser.src)}
+                                            src={user.userProfileImage}
                                             alt={`cover-${user.userName}`}
                                             className="w-full aspect-[3/4] object-cover rounded-md"
+                                            type='dummyUser'
                                         />
                                     </div>
                                     {/* <Avatar src={user.userProfileImage} name={user.userFullName || user.userName} /> */}

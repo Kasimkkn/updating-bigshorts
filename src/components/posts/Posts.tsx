@@ -9,7 +9,7 @@ import { savePostLike } from '@/services/savepostlike';
 import { timeAgo } from '@/utils/features';
 import useUserRedirection from '@/utils/userRedirection';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentTree from '../Interactive/contentTree';
 import PostTitle from '../PostTitle';
 import LikeCommentShare from './LikeCommentShare';
@@ -35,6 +35,7 @@ interface PostsProps {
     index?: number;
     isFromSaved: boolean;
     isFromProfile: boolean;
+    onPostExpansionChange?: (isExpanded: boolean) => void;
 }
 
 const Posts: React.FC<PostsProps> = ({
@@ -42,7 +43,8 @@ const Posts: React.FC<PostsProps> = ({
     loadMorePosts,
     index,
     isFromSaved,
-    isFromProfile
+    isFromProfile,
+    onPostExpansionChange
 }) => {
     const [id] = useLocalStorage<string>('userId', '');
     const userId = id ? parseInt(id) : 0;
@@ -66,8 +68,6 @@ const Posts: React.FC<PostsProps> = ({
     const {
         openMoreOptions,
         setOpenMoreOptions,
-        isReportModalOpen,
-        isAboutAccountModalOpen,
         isModalOpen,
         setIsModalOpen,
         isPostsModalOpen,
@@ -82,8 +82,6 @@ const Posts: React.FC<PostsProps> = ({
         setIsPostUsersModalOpen,
         contentTreeOpen,
         setContentTreeOpen,
-        openReportModal,
-        openAboutAccountModal
     } = usePostModals();
 
     useInfiniteScroll(loadMorePosts);
@@ -152,6 +150,13 @@ const Posts: React.FC<PostsProps> = ({
         console.log("NO MORE INSIGHTS");
     };
 
+    // Notify parent component when post expansion state changes
+    useEffect(() => {
+        if (onPostExpansionChange) {
+            onPostExpansionChange(!!isPostExpanded);
+        }
+    }, [isPostExpanded, onPostExpansionChange]);
+
     return (
         <div className="space-y-4 w-full flex flex-col items-center relative">
             <div
@@ -185,8 +190,6 @@ const Posts: React.FC<PostsProps> = ({
                                         postId: post.postId,
                                         isForCollaborators: true
                                     })}
-                                    onReport={openReportModal}
-                                    onAboutAccount={openAboutAccountModal}
                                     updatePost={updatePost}
                                 />
 
@@ -226,8 +229,6 @@ const Posts: React.FC<PostsProps> = ({
                                             isForCollaborators: true
                                         })}
                                         isInteractiveVideo={true}
-                                        onReport={openReportModal}
-                                        onAboutAccount={openAboutAccountModal}
                                         updatePost={updatePost}
                                         showFollowButton={userId !== post.userId}
                                     />
@@ -360,10 +361,6 @@ const Posts: React.FC<PostsProps> = ({
                     setPostInsightsModalCoverfile({ image: '', aspect: 0.75 });
                 }}
                 fecthVideoPostInsights={fetchVideoInsights}
-                isReportModalOpen={isReportModalOpen}
-                onReportClose={() => openReportModal(0)}
-                isAboutAccountModalOpen={isAboutAccountModalOpen}
-                onAboutAccountClose={() => openAboutAccountModal(0)}
                 isPostUsersModalOpen={isPostUsersModalOpen}
                 taggedUsers={[]}
                 onPostUsersClose={() => setIsPostUsersModalOpen(null)}

@@ -482,6 +482,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ onSubmit, finalSubmitLoading,
                     onClose={() => setIsThumbnailPickerOpen(false)}
                     videoUrl={videoUrl}
                     isFor="snip"
+                    defaultThumbnail={coverFileImage || undefined}
                 />
             }
             <div className="flex justify-end gap-4 p-2">

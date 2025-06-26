@@ -8,9 +8,10 @@ interface ThumbnailPickerProps {
     onClose: () => void;
     videoUrl: string
     isFor?: "flix" | "snip"
+    defaultThumbnail?: string
 }
 
-const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose, videoUrl, isFor = "flix" }) => {
+const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose, videoUrl, isFor = "flix", defaultThumbnail }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [currentTime, setCurrentTime] = useState<number>(0);
@@ -19,11 +20,37 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
+    const isCrossOriginUrl = videoUrl.startsWith('https://')
+
     const formatTime = (timeInSeconds: number): string => {
         const minutes = Math.floor(timeInSeconds / 60);
         const seconds = Math.floor(timeInSeconds % 60);
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
+
+    useEffect(() => {
+        if (defaultThumbnail && canvasRef.current) {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                const img = new Image();
+                img.onload = () => {
+                    // Set canvas dimensions to match the default aspect ratio
+                    canvas.width = isFor === "flix" ? 640 : 360;
+                    canvas.height = isFor === "flix" ? 360 : 640;
+                    
+                    // Draw the image on the canvas
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                img.src = defaultThumbnail;
+                
+                // Handle loading errors
+                img.onerror = () => {
+                    console.error("Failed to load default image");
+                };
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -164,7 +191,7 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-bg-color bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-bg-color bg-opacity-50 z-50 text-text-color">
             <div className="bg-primary-bg-color rounded-lg p-6 w-[90%] max-w-lg shadow-xl">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-medium">Add Thumbnail</h3>
@@ -177,14 +204,6 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    {/* Hidden video element for frame extraction */}
-                    <video
-                        ref={videoRef}
-                        src={videoUrl}
-                        className="hidden"
-                        preload="metadata"
-                        onEnded={() => setIsPlaying(false)}
-                    />
 
                     {/* Hidden file input */}
                     <input
@@ -206,7 +225,15 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose
                     </div>
 
                     {/* Video controls */}
-                    <div className="flex items-center gap-2">
+                    {!isCrossOriginUrl && <div className="flex items-center gap-2">
+                        {/* Hidden video element for frame extraction */}
+                        <video
+                            ref={videoRef}
+                            src={videoUrl}
+                            className="hidden"
+                            preload="metadata"
+                            onEnded={() => setIsPlaying(false)}
+                        />
                         <Button
                             onClick={togglePlayPause}
                             isLinearBorder={true}
@@ -227,7 +254,7 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ setThumbnail, onClose
                         />
 
                         <span className="text-sm">{formatTime(duration)}</span>
-                    </div>
+                    </div>}
                 </div>
 
                 <div className="flex justify-end mt-6 gap-2">

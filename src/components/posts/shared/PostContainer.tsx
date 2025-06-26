@@ -22,7 +22,7 @@ const PostContainer: React.FC<PostContainerProps> = ({
     return (
         <div
             id={postId.toString()}
-            className={`${className} ${isExpanded ? 'xl:w-[200%] xl:-translate-x-1/4' : ''}`}
+            className={`${className} ${isExpanded ? 'xl:w-[200%] xl:-translate-x-[calc(50%_+_10px)]' : ''}`}   // translate to left by 50% of self plus 50% of margin left on expanded content
             style={{ zIndex: isExpanded ? 50 : 'auto' }}
         >
             {children}

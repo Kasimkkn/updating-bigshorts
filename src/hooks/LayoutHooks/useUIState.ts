@@ -17,6 +17,7 @@ export const useUIState = () => {
         isSideBarOpen,
         isNotificationOpen,
         isSearchOpen,
+        setIsSideBarOpen,
         openSettings,
         isAccountOverviewOpen,
         toggleSidebar,

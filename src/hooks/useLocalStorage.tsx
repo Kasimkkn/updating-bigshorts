@@ -87,6 +87,17 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: SetValue<
     }
 
     const saveToStorage = async () => {
+      // Check if the value is the initial empty value - don't save it
+      // This prevents creating empty/default entries in localStorage
+      if (
+        // Skip saving if value is empty string
+        (typeof storedValue === 'string' && storedValue === '') ||
+        // Skip saving if value is exactly equal to the initialValue
+        JSON.stringify(storedValue) === JSON.stringify(initialValue)
+      ) {
+        return;
+      }
+
       try {
         const valueToStore = storedValue instanceof Function ? storedValue(initialValue) : storedValue;
 
@@ -108,7 +119,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: SetValue<
       }
     };
 
-    // saveToStorage();
+    saveToStorage();
   }, [key, storedValue, isHydrated, initialValue]);
 
   const setValue = (value: SetValue<T>) => {

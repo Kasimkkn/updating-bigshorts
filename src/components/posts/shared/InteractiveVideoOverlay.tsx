@@ -12,8 +12,6 @@ interface InteractiveVideoOverlayProps {
     onCollaboratorsClick: () => void;
     onMoreOptions: (postId: number) => void;
     onContentTreeToggle: (postId: number) => void;
-    onReport: (postId: number) => void;
-    onAboutAccount: (userId: number) => void;
     updatePost: (postId: number, property: string, isBeforeUpdate: number) => void;
 }
 
@@ -25,8 +23,6 @@ const InteractiveVideoOverlay: React.FC<InteractiveVideoOverlayProps> = ({
     onCollaboratorsClick,
     onMoreOptions,
     onContentTreeToggle,
-    onReport,
-    onAboutAccount,
     updatePost
 }) => {
     return (
@@ -72,10 +68,8 @@ const InteractiveVideoOverlay: React.FC<InteractiveVideoOverlayProps> = ({
                                     onMoreOptions(0);
                                 }
                             }}
-                            openReport={onReport}
                             updatePost={updatePost}
                             page="followers"
-                            openAboutAccount={onAboutAccount}
                         />
                     )}
                 </button>

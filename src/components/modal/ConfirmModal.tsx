@@ -32,7 +32,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isDeleteAccount = false, is
                         {isDeleteAccount ? "Cancel" : "No"}
                     </button>
                     <Button
-                        onCLick={onConfirm}
+                        onClick={onConfirm}
                         isLinearBtn={true}
                     >
                         {isPerformingAction ? (

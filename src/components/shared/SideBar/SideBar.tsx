@@ -1,7 +1,7 @@
 import logo from "@/assets/mainLogo.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Avatar from "@/components/Avatar/Avatar";
 import { useInAppRedirection } from "@/context/InAppRedirectionContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
@@ -12,6 +12,7 @@ import SocialIcon from "@/components/SocialIcon";
 import { IconType } from 'react-icons';
 
 interface SideBarProps {
+  setIsSideBarOpen: Dispatch<SetStateAction<boolean>>;
   isSideBarOpen: boolean;
   toggleSidebar: () => void;
   toggleSettings: () => void;
@@ -44,6 +45,7 @@ interface ProfileNavItem extends BaseNavItem {
 type NavItem = BaseNavItem | ActionNavItem | ProfileNavItem;
 
 const SideBar = ({
+  setIsSideBarOpen,
   isSideBarOpen,
   toggleSidebar,
   toggleSettings,
@@ -53,17 +55,18 @@ const SideBar = ({
   toggleCreatingOptions,
 }: SideBarProps) => {
   const pathname = usePathname();
-  const [isHovered, setIsHovered] = useState(false);
   const { isChatOpen, clearSnipsData } = useInAppRedirection();
   const { userData } = useUserProfile()
   const [username] = useLocalStorage<string>('username', '');
-  useEffect(() => {
-    if (isHovered && !isSideBarOpen) {
-      toggleSidebar();
-    } else if (!isHovered && isSideBarOpen) {
-      toggleSidebar();
-    }
-  }, [isHovered, isSideBarOpen, toggleSidebar]);
+
+  // Define routes where sidebar should be collapsed
+  const collapsedRoutes = ['/home/playlist', '/home/series', '/home/flix'];
+
+  // Check if current route should have collapsed sidebar (including sub-routes)
+  const shouldCollapse = collapsedRoutes.some(route => pathname?.startsWith(route));
+
+  // Determine if sidebar is expanded - it's expanded when isSideBarOpen is true AND not on collapsed routes
+  const isExpanded = isSideBarOpen && !shouldCollapse;
 
   const mainNavItems: (ActionNavItem | BaseNavItem)[] = [
     {
@@ -152,8 +155,21 @@ const SideBar = ({
       isDekstopShow: true,
     },
   ];
+
+  // Update sidebar state based on route
+  useEffect(() => {
+    if (shouldCollapse) {
+      // On collapsed routes, keep the sidebar closed
+      setIsSideBarOpen(false);
+    } else {
+      // On normal routes, keep the sidebar open
+      setIsSideBarOpen(true);
+    }
+  }, [shouldCollapse, setIsSideBarOpen]);
+
   const NavItem = ({ item }: { item: NavItem }) => {
     const isExternal = "external" in item && item.external;
+
     if (isExternal && item.icon) {
       return (
         <a
@@ -161,16 +177,17 @@ const SideBar = ({
           target="_blank"
           rel="noopener noreferrer"
           className="w-full"
+          title={item.label}
         >
           <span
-            className={`relative flex items-center gap-3 ${isSideBarOpen ? "py-2 px-4" : "py-2 px-2 justify-center"
+            className={`relative flex items-center gap-3 ${isExpanded ? "py-2 px-4" : "py-2 px-2 justify-center"
               } 
                         rounded-md hover:bg-secondary-bg-color/10 transition-all duration-200`}
           >
-            <span className={`${isSideBarOpen ? "text-lg" : "text-xl"}`}>
-              {<item.icon className={item?.className}/>}
+            <span className={`${isExpanded ? "text-lg" : "text-xl"}`}>
+              {<item.icon className={item?.className} />}
             </span>
-            {isSideBarOpen && item.label}
+            {isExpanded && item.label}
           </span>
         </a>
       );
@@ -180,18 +197,18 @@ const SideBar = ({
       return (
         <Link href={item.href} className="w-full">
           <span
-            className={`relative flex items-center gap-2 ${isSideBarOpen ? "py-2 px-4" : "p-1 justify-center"
+            className={`relative flex items-center gap-2 ${isExpanded ? "py-2 px-4" : "p-1 justify-center"
               } 
                         rounded-md hover:bg-secondary-bg-color/10 transition-all duration-200`}
           >
-            <span className={`${isSideBarOpen ? "text-lg" : "text-xl"}`}>
+            <span className={`${isExpanded ? "text-lg" : "text-xl"}`}>
               <Avatar
                 src={userData?.userProfileImage}
                 width="w-10"
                 height="h-10"
               />
             </span>
-            {isSideBarOpen && (
+            {isExpanded && (
               <div className="flex flex-col">
                 <span className="text-xs truncate w-24">
                   @{username || 'User'}
@@ -203,7 +220,6 @@ const SideBar = ({
       );
     }
 
-
     const isActionItem = (item: NavItem): item is ActionNavItem => {
       return "action" in item;
     };
@@ -212,7 +228,7 @@ const SideBar = ({
       return (
         <button type="button" className="w-full" onClick={item.action}>
           <span
-            className={`relative flex items-center gap-3 ${isSideBarOpen ? "py-2 px-4" : "py-2 px-2 justify-center"
+            className={`relative flex items-center gap-3 ${isExpanded ? "py-2 px-4" : "py-2 px-2 justify-center"
               } 
                         rounded-md hover:bg-secondary-bg-color/10 transition-all duration-200
                         ${pathname === item.href
@@ -221,11 +237,11 @@ const SideBar = ({
               }`}
           >
             <span
-              className={`${isSideBarOpen ? "text-lg" : "text-xl"}`}
+              className={`${isExpanded ? "text-lg" : "text-xl"}`}
             >
-              {<item.icon className={item?.className}/>}
+              {<item.icon className={item?.className} />}
             </span>
-            {isSideBarOpen && item.label}
+            {isExpanded && item.label}
           </span>
         </button>
       );
@@ -234,7 +250,7 @@ const SideBar = ({
     return (
       <Link href={item.href} onClick={item.label === "Snips" ? clearSnipsData : undefined}>
         <span
-          className={`relative flex items-center gap-3 ${isSideBarOpen ? "py-2 px-4" : "py-2 px-2 justify-center"
+          className={`relative flex items-center gap-3 ${isExpanded ? "py-2 px-4" : "py-2 px-2 justify-center"
             }
                     rounded-md hover:bg-secondary-bg-color/10 transition-all duration-200
                     ${pathname === item.href ? "linearBtn" : ""
@@ -249,11 +265,11 @@ const SideBar = ({
             </span>
           )}
           <span
-            className={isSideBarOpen ? "text-lg" : "text-xl"}
+            className={isExpanded ? "text-lg" : "text-xl"}
           >
-            {item.icon && <item.icon className={item?.className}/>}
+            {item.icon && <item.icon className={item?.className} />}
           </span>
-          {isSideBarOpen && item.label}
+          {isExpanded && item.label}
         </span>
       </Link>
     );
@@ -263,10 +279,8 @@ const SideBar = ({
     <>
       <aside
         className={`md:block hidden transition-all duration-300 bg-primary-bg-color text-text-color 
-                fixed h-[100vh] z-30 ${isSideBarOpen ? "w-56" : "w-16"} sidebar
+                fixed h-[100vh] z-30 ${isExpanded ? "w-56" : "w-16"} sidebar
                 border-r border-gray-800/20`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         {/* Header */}
         <div className="px-4 flex items-center gap-1 py-3 mb-2">
@@ -278,7 +292,7 @@ const SideBar = ({
               onContextMenu={(e) => e.preventDefault()}
             />
           </span>
-          {isSideBarOpen && (
+          {isExpanded && (
             <div className="flex items-center gap-2">
               <span className="text-lg text-text-color font-bold">
                 BigShorts
@@ -337,7 +351,7 @@ const SideBar = ({
                       : "text-text-color"
                       }`}
                   >
-                    {<item.icon className={item?.className}/>}
+                    {<item.icon className={item?.className} />}
                   </span>
                   <span className="text-sm">{item.label}</span>
                 </span>
@@ -352,7 +366,7 @@ const SideBar = ({
                                 ${pathname === item.href ? "linearText" : ""}`}
               >
                 <span className="text-xl">
-                  {item.icon && <item.icon className={`${item.className} ${pathname === item.href ? "svg-gradient" : ""}`}/>}
+                  {item.icon && <item.icon className={`${item.className} ${pathname === item.href ? "svg-gradient" : ""}`} />}
                 </span>
                 <span className="text-sm">{item.label}</span>
               </span>
@@ -363,7 +377,5 @@ const SideBar = ({
     </>
   );
 };
-
-
 
 export default SideBar;

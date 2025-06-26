@@ -42,12 +42,15 @@ import { BiSolidVideos } from 'react-icons/bi';
 import { CgPlayList } from 'react-icons/cg';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import { IoDocumentsSharp } from 'react-icons/io5';
-import { MdGridOn, MdOutlineAccountBalanceWallet, MdOutlineFileCopy, MdOutlineMovie, MdOutlinePlayArrow, MdStarOutline } from 'react-icons/md';
+import { MdGridOn, MdOutlineAnalytics, MdOutlineFileCopy, MdOutlineMovie, MdOutlinePlayArrow, MdStarOutline } from 'react-icons/md';
 import { SlPicture } from "react-icons/sl";
 import { TbAt } from 'react-icons/tb';
 import { useMobileDetection } from '@/hooks/useMobileDetection'; // Adjust import path as needed
 import MobileAppModal from '@/components/modal/MobileAppModal';
 import SafeImage from '@/components/shared/SafeImage';
+import toast from 'react-hot-toast';
+import EditFLixModal from '@/components/modal/EditFlixModal';
+import ConfirmModal from '@/components/modal/ConfirmModal';
 
 type Tab = {
     name: string;
@@ -108,6 +111,10 @@ const ProfilePage = () => {
     const [showMobileModal, setShowMobileModal] = useState(false);
     const [selectedContentType, setSelectedContentType] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
+    const [editingMini, setEditingMini] = useState<PostlistItem | null>(null);
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [miniToDelete, setMiniToDelete] = useState<PostProfileData | null>(null);
+    const [isDeletingMini, setIsDeletingMini] = useState(false);
     const handleOpenPlaylist = (item: UserPlaylist) => {
         if (isUserPlaylist(item)) {
             const adaptedPlaylist: Playlist = {
@@ -300,48 +307,57 @@ const ProfilePage = () => {
         }
     }
     const handleEditMini = (mini: PostProfileData) => {
-        // Close the modal first
         setOpenMiniListModal(false);
-
-        // Implement your edit logic here
-        // You might want to open an edit modal or navigate to an edit page
-        // Example: Navigate to edit page
-        // router.push(`/edit-mini/${mini.postId}`);
-
-        // Or: Open an edit modal
-        // setEditMiniData(mini);
-        // setOpenEditMiniModal(true);
+        if (isPostListItem(mini)) {
+            setEditingMini(mini);
+        } else {
+            toast.error('This mini cannot be edited.');
+            return;
+        }
     };
 
     const handleDeleteMini = async (mini: PostProfileData) => {
-        // Close the modal first
+        // Close the mini list modal first
         setOpenMiniListModal(false);
 
-        // Show confirmation dialog
-        const confirmed = window.confirm(`Are you sure you want to delete "${mini.postTitle || 'this mini'}"?`);
+        // Set the mini to delete and open the confirmation modal
+        setMiniToDelete(mini);
+        setIsConfirmModalOpen(true);
+    };
 
-        if (confirmed) {
-            try {
-                // Call the deleteFlix API
-                const response = await deleteFlix({
-                    postId: mini.postId.toString(),
-                });
+    const confirmDeleteMini = async () => {
+        if (!miniToDelete) return;
 
-                if (response.isSuccess) {
-                    // Refresh the tab data to remove the deleted mini
-                    updateTabData();
-                    // Show success message (optional - you can remove this if you don't want the alert)
-                    alert('Mini deleted successfully!');
-                } else {
-                    // Handle API error response
-                    alert(response.message || 'Failed to delete mini. Please try again.');
-                }
-            } catch (error) {
-                console.error('Error deleting mini:', error);
-                alert('An error occurred while deleting the mini. Please try again.');
+        try {
+            setIsDeletingMini(true);
+            // Call the deleteFlix API
+            const response = await deleteFlix({
+                postId: miniToDelete.postId.toString(),
+            });
+
+            if (response.isSuccess) {
+                // Refresh the tab data to remove the deleted mini
+                updateTabData();
+                toast.success('Mini deleted successfully!');
+            } else {
+                // Handle API error response
+                toast.error(response.message || 'Failed to delete mini. Please try again.');
             }
+        } catch (error) {
+            console.error('Error deleting mini:', error);
+            toast.error('An error occurred while deleting the mini. Please try again.');
+        } finally {
+            setIsDeletingMini(false);
+            setIsConfirmModalOpen(false);
+            setMiniToDelete(null);
         }
     };
+
+    const cancelDeleteMini = () => {
+        setIsConfirmModalOpen(false);
+        setMiniToDelete(null);
+    };
+
     async function fetchStoryProfilePage() {
         try {
             const response = await getStoryProfile({ userId: parseInt(userId!) });
@@ -405,8 +421,9 @@ const ProfilePage = () => {
     }, [shouldRefreshProfileStory])
 
     useEffect(() => {
+        if (!userIdHydrated) return;
         fetchTabData();
-    }, [activeTab]);
+    }, [activeTab, userIdHydrated]);
 
     if (!profileData) {
         return <ProfilePageSkeleton />;
@@ -555,7 +572,7 @@ const ProfilePage = () => {
                                     onClick={handleAccountOverviewModal} // fixed typo
                                     className="max-md:hidden border-2 border-border-color"
                                 >
-                                    <MdOutlineAccountBalanceWallet className="text-2xl text-text-color max-md:text-sm flex-shrink-0" />
+                                    <MdOutlineAnalytics className="text-2xl text-text-color max-md:text-sm flex-shrink-0" />
                                 </Button>
                                 <Button
                                     onClick={() => setOpenSuggestions(!openSuggestions)}
@@ -601,7 +618,7 @@ const ProfilePage = () => {
                             )}
                         </div>
 
-                        <div className='w-full flex border-t border-b border-border-color p-2'>
+                        <div className="w-full flex border-b border-border-color mt-2">
                             {tabs
                                 .filter(tab => {
                                     // Show UserPlaylists if isBigshortsOriginal is 0
@@ -614,7 +631,10 @@ const ProfilePage = () => {
                                 .map((tab) => (
                                     <button
                                         key={tab.name}
-                                        className={`flex-1 text-center p-2 flex gap-2 items-center justify-center ${activeTab === tab.name ? ' text-text-color' : 'text-primary-text-color'}`}
+                                        className={`flex-1 text-center p-2 flex gap-2 items-center justify-center ${activeTab === tab.name
+                                            ? "border-b-2 border-border-color"
+                                            : "border-none"
+                                            } `}
                                         onClick={() => setActiveTab(tab.name)}
                                     >
                                         {tab.icon} <span className='text-sm max-md:hidden'>{tab.name}</span>
@@ -625,7 +645,7 @@ const ProfilePage = () => {
                             {loading ? (
                                 <ProfileContentSkeleton />
                             ) : tabData.length === 0 ? (
-                                <div className='flex flex-col text-text-color0 items-center justify-center h-[350px] gap-4'>
+                                <div className='flex flex-col text-text-color items-center justify-center h-[350px] gap-4'>
                                     {tabs.find((tab) => tab.name === activeTab)?.largeIcon}
                                     <p>{tabs.find((tab) => tab.name === activeTab)?.text ? tabs.find((tab) => tab.name === activeTab)?.text : "No data to show"}</p>
                                 </div>
@@ -813,6 +833,23 @@ const ProfilePage = () => {
                     clearFlixData={clearFlixData}
                     onEditMini={handleEditMini}
                     onDeleteMini={handleDeleteMini}
+                />
+            )}
+
+            {editingMini && (
+                <EditFLixModal
+                    flix={editingMini}
+                    onClose={() => setEditingMini(null)}
+                />
+            )}
+
+            {isConfirmModalOpen && miniToDelete && (
+                <ConfirmModal
+                    isOpen={isConfirmModalOpen}
+                    message={`Are you sure you want to delete "${miniToDelete.postTitle || 'this mini'}"?`}
+                    onConfirm={confirmDeleteMini}
+                    onCancel={cancelDeleteMini}
+                    isPerformingAction={isDeletingMini}
                 />
             )}
         </>
